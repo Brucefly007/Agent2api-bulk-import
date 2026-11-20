@@ -79,7 +79,18 @@ Body: {"accounts": [ … ]}
 bulk-import.js                 插件本体（注入到面板 /app/ui/ 下）
 install.py                     安装 / 卸载 / 状态
 examples/account.example.json  账号 JSON 示例（已脱敏）
+docs/FAQ.md                    常见问题
+tests/                         install.py 的单元测试
+.github/workflows/ci.yml       语法检查 + 单元测试
 ```
+
+## 测试
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+只依赖标准库，覆盖 `install.py` 里对 `index.html` 的标签注入逻辑（插入位置、幂等、无 `</body>` 等边界）。
 
 ## License
 
