@@ -258,12 +258,30 @@
 
   // ---------- 挂载：账号页「添加账号」右边的按钮 ----------
   var BTN_ID = 'btn-bulk-import';
-  var ANCHOR = 'btn-add-account-2';
+  // 不同面板版本的「添加账号」按钮 id 会变，按优先级依次尝试；
+  // 全部落空时退化为按按钮文本匹配，避免升级后按钮挂不上。
+  var ANCHORS = ['btn-add-account-2', 'btn-add-account'];
+  var ANCHOR_TEXTS = ['添加账号', '添加帐号', 'Add account', 'Add Account'];
+
+  function findAnchor() {
+    for (var i = 0; i < ANCHORS.length; i++) {
+      var el = document.getElementById(ANCHORS[i]);
+      if (el && el.parentNode) return el;
+    }
+    var nodes = document.querySelectorAll('button, a');
+    for (var j = 0; j < nodes.length; j++) {
+      var text = (nodes[j].textContent || '').trim();
+      for (var k = 0; k < ANCHOR_TEXTS.length; k++) {
+        if (text === ANCHOR_TEXTS[k] && nodes[j].parentNode) return nodes[j];
+      }
+    }
+    return null;
+  }
 
   function mountToolbarButton() {
-    var anchor = document.getElementById(ANCHOR);
-    if (!anchor || !anchor.parentNode) return;
     if (document.getElementById(BTN_ID)) return;
+    var anchor = findAnchor();
+    if (!anchor || !anchor.parentNode) return;
     var b = document.createElement('button');
     b.id = BTN_ID;
     b.type = 'button';
